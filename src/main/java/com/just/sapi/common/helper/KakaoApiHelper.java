@@ -2,8 +2,11 @@ package com.just.sapi.common.helper;
 
 import com.just.sapi.blog.dto.BlogDTO;
 import com.just.sapi.blog.dto.BlogSearchParamsDTO;
+import com.just.sapi.common.advice.ServiceException;
 import com.just.sapi.common.dto.ApiCallDTO;
 import com.just.sapi.common.dto.KakaoApiResponseDTO;
+import com.just.sapi.common.dto.KakaoApiResponseErrorDTO;
+import com.just.sapi.common.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -11,15 +14,15 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientException;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -57,18 +60,30 @@ public class KakaoApiHelper implements ApiHelper {
 
     @Override
     public KakaoApiResponseDTO apiCall(ApiCallDTO apiCallDTO) {
-        KakaoApiResponseDTO result = webClient
-                .mutate()
-                .defaultHeaders(httpHeaders -> {
-                    httpHeaders.addAll(apiCallDTO.getHeaders());
-                })
-                .build()
-                .get()
-                .uri(apiCallDTO.getUrl())
-                .retrieve()
-                .bodyToMono(KakaoApiResponseDTO.class).block();
+        try {
+            Mono<KakaoApiResponseDTO> result = webClient
+                    .mutate()
+                    .defaultHeaders(httpHeaders -> {
+                        httpHeaders.addAll(apiCallDTO.getHeaders());
+                    })
+                    .build()
+                    .get()
+                    .uri(apiCallDTO.getUrl())
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .onStatus(HttpStatus -> HttpStatus.is4xxClientError(), response -> {
+                        return Mono.error(new ServiceException(HttpStatus.BAD_REQUEST.value(), ErrorCode.INVALID_PARAMETER.message));
+                    })
+                    .bodyToMono(KakaoApiResponseDTO.class);
+            return result.block();
+        } catch (WebClientException e) {
+            throw e;
+        } catch (ServiceException e) {
+            throw e;
+        } catch (Exception e) {
+            throw e;
+        }
 
-        return result;
     }
 
     private String getRequestUrl(BlogSearchParamsDTO blogSearchParamsDTO) {

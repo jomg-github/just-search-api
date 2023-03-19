@@ -2,18 +2,23 @@ package com.just.sapi.blog.dto;
 
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.validator.constraints.Range;
 
-@Data
-@Builder
+@Getter
 public class BlogSearchParamsDTO {
-    @NotNull
+    @NotNull(message = "검색어를 입력하세요.")
     private String query;
-    @Builder.Default
     private String sort = "accuracy";
-    @Builder.Default
+    @Range(min = 1, max = 500)
     private Integer page = 1;
-    @Builder.Default
+    @Range(min = 1, max = 500)
     private Integer limit = 10;
+    @Builder
+    public BlogSearchParamsDTO(String query, String sort, Integer page, Integer limit) {
+        this.query = query;
+        this.sort = sort == null ? this.sort : sort;
+        this.page = page == null ? this.page : page;
+        this.limit = limit == null ? this.limit : limit;
+    }
 }
