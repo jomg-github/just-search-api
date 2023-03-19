@@ -5,7 +5,6 @@ import com.just.sapi.blog.dto.BlogSearchParamsDTO;
 import com.just.sapi.common.advice.ServiceException;
 import com.just.sapi.common.dto.ApiCallDTO;
 import com.just.sapi.common.dto.KakaoApiResponseDTO;
-import com.just.sapi.common.dto.KakaoApiResponseErrorDTO;
 import com.just.sapi.common.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
