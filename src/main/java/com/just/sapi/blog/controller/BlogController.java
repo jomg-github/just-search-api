@@ -4,19 +4,15 @@ import com.just.sapi.blog.dto.BlogDTO;
 import com.just.sapi.blog.dto.BlogSearchParamsDTO;
 import com.just.sapi.blog.dto.BlogSimplePageUtilDTO;
 import com.just.sapi.blog.service.BlogService;
-import com.just.sapi.common.dto.ResponseErrorDTO;
 import com.just.sapi.common.dto.ResponseListMetaDTO;
-import com.just.sapi.common.dto.ResponseMetaDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClientException;
 
 @RestController
 @RequiredArgsConstructor

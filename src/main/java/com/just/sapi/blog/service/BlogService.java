@@ -2,21 +2,18 @@ package com.just.sapi.blog.service;
 
 import com.just.sapi.blog.dto.BlogDTO;
 import com.just.sapi.blog.dto.BlogSearchParamsDTO;
-import com.just.sapi.common.dto.ApiCallDTO;
+import com.just.sapi.blog.entity.BlogSearchLogEntity;
+import com.just.sapi.blog.repository.BlogSearchLogRepository;
 import com.just.sapi.common.dto.KakaoApiResponseDTO;
 import com.just.sapi.common.dto.KakaoMetaDTO;
 import com.just.sapi.common.helper.ApiHelper;
 import com.just.sapi.common.utils.SimplePageUtil;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,8 +21,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BlogService {
     private final ApiHelper apiHelper;
+    private final BlogSearchLogRepository blogSearchLogRepository;
 
+    @Transactional
     public Page<BlogDTO> findBlogsByParameter(BlogSearchParamsDTO blogSearchParamsDTO) {
+        setBlogSearchLog(blogSearchParamsDTO.getQuery());
         KakaoApiResponseDTO response = apiHelper.searchBlogs(blogSearchParamsDTO);
         KakaoMetaDTO meta = response.getMeta();
 
@@ -45,6 +45,14 @@ public class BlogService {
         Pageable pageable = SimplePageUtil.kakaoPagableRequestOf(blogSearchParamsDTO.getPage(), blogSearchParamsDTO.getLimit(), meta.getIsEnd(), meta.getPageableCount());
 
         return new PageImpl<>(blogs, pageable, meta.getPageableCount());
+    }
+
+    private void setBlogSearchLog(String keyword) {
+        blogSearchLogRepository.save(
+                BlogSearchLogEntity.builder()
+                        .keyword(keyword)
+                        .build()
+        );
     }
 
 }
