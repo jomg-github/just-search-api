@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -34,27 +35,13 @@ public class KakaoApiHelper implements ApiHelper {
     private final WebClient webClient;
 
     @Override
-    public Page<BlogDTO> searchBlogs(BlogSearchParamsDTO blogSearchParamsDTO, Pageable pageable) {
-        KakaoApiResponseDTO response = apiCall(ApiCallDTO.builder()
+    public KakaoApiResponseDTO searchBlogs(BlogSearchParamsDTO blogSearchParamsDTO) {
+        return apiCall(ApiCallDTO.builder()
                 .headers(getHeaders())
                 .method(HttpMethod.GET)
                 .url(getRequestUrl(blogSearchParamsDTO))
                 .build()
         );
-
-        List<BlogDTO> blogs = response.getDocuments().stream()
-                .map(blog -> BlogDTO.builder()
-                        .title(blog.getTitle())
-                        .contents(blog.getContents())
-                        .url(blog.getUrl())
-                        .blogName(blog.getBlogName())
-                        .thumbnailUrl(blog.getThumbnailUrl())
-                        .datetime(blog.getDatetime())
-                        .build()
-                )
-                .toList();
-
-        return new PageImpl<>(blogs, pageable, response.getMeta().getPageableCount());
     }
 
     @Override

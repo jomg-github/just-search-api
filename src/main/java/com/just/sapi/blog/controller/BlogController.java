@@ -32,7 +32,7 @@ public class BlogController {
         BlogSimplePageUtilDTO simplePageResult = BlogSimplePageUtilDTO.builder()
                 .items(pageResult.getContent())
                 .meta(ResponseListMetaDTO.builder()
-                        .page(pageResult.getPageable().getPageNumber() + 1)
+                        .page(pageResult.getPageable().getPageNumber())
                         .pageSize(pageResult.getSize())
                         .totalPages(pageResult.getTotalPages())
                         .totalCount(pageResult.getTotalElements())
