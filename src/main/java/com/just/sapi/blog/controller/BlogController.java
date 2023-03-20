@@ -37,17 +37,4 @@ public class BlogController {
 
         return ResponseEntity.status(HttpStatus.OK).body(simplePageResult);
     }
-
-//    @ExceptionHandler
-//    public Object handle(RuntimeException e) {
-//        e.printStackTrace();
-//        return ResponseErrorDTO.builder()
-//                .meta(new ResponseMetaDTO(Boolean.FALSE))
-//                .error(new ResponseErrorDTO.ResponseError(HttpStatus.BAD_REQUEST.value(), "테스트2"))
-//                .build();
-//    }
-//    @ExceptionHandler
-//    public ResponseEntity<?> handle(WebClientException e) {
-//        throw e;
-//    }
 }
