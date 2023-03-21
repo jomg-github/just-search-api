@@ -17,7 +17,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class BlogSearchRankRepositoryImpl implements BlogSearchRankRepository {
+public class BlogSearchRankRepositoryImpl implements BlogSearchRankCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
     private final QBlogSearchLogEntity qBlogSearchLogEntity = QBlogSearchLogEntity.blogSearchLogEntity;
     private final QBlogSearchRankEntity qBlogSearchRankEntity = QBlogSearchRankEntity.blogSearchRankEntity;
@@ -39,7 +39,7 @@ public class BlogSearchRankRepositoryImpl implements BlogSearchRankRepository {
     @Override
     public List<BlogSearchLogDTO> findBlogSearchLogGroupByKeywordBetween(LocalDateTime startDate, LocalDateTime endDate) {
         NumberPath<Long> aliasCount = Expressions.numberPath(Long.class, "count");
-        return jpaQueryFactory.select(
+        List<BlogSearchLogDTO> list = jpaQueryFactory.select(
                 Projections.constructor(
                         BlogSearchLogDTO.class,
                         qBlogSearchLogEntity.keyword,
@@ -51,5 +51,11 @@ public class BlogSearchRankRepositoryImpl implements BlogSearchRankRepository {
                 .orderBy(aliasCount.desc())
                 .limit(10)
                 .fetch();
+
+        return list;
+    }
+
+    @Override
+    public void saveRankedBlogSearchLogs(List<BlogSearchRankDTO> rankedBlogSearchLogs) {
     }
 }

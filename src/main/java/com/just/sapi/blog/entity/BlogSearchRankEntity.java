@@ -23,4 +23,7 @@ public class BlogSearchRankEntity extends BaseTimeEntity {
 
     @Column(name = "KEYWORD", nullable = false, length = 100)
     private String keyword;
+
+    @Column(name = "COUNT", nullable = false)
+    private Long count;
 }

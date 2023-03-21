@@ -23,6 +23,8 @@ public class QBlogSearchRankEntity extends EntityPathBase<BlogSearchRankEntity> 
 
     public final DateTimePath<java.time.LocalDateTime> aggregatedAt = createDateTime("aggregatedAt", java.time.LocalDateTime.class);
 
+    public final NumberPath<Long> count = createNumber("count", Long.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
