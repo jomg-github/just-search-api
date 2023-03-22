@@ -1,17 +1,16 @@
 package com.just.sapi.blog.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Table(name = "TB_BLOG_SEARCH_RANK")
+@Table(name = "TB_BLOG_SEARCH_RANK", indexes = @Index(name = "IDX_BLOG_SEARCH_RANK_01", columnList = "AGGREGATED_AT DESC"))
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class BlogSearchRankEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

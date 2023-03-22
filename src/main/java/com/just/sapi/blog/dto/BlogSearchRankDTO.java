@@ -1,14 +1,17 @@
 package com.just.sapi.blog.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
 @Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BlogSearchRankDTO {
-    private Long rowId;
+    @JsonIgnore
     private LocalDateTime aggregatedAt;
     private String keyword;
+    private Long count;
 }

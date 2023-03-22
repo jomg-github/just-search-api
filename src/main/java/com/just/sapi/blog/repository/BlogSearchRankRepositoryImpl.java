@@ -3,6 +3,7 @@ package com.just.sapi.blog.repository;
 import com.just.sapi.blog.dto.BlogSearchLogDTO;
 import com.just.sapi.blog.dto.BlogSearchRankCountMinMaxDTO;
 import com.just.sapi.blog.dto.BlogSearchRankDTO;
+import com.just.sapi.blog.entity.BlogSearchRankEntity;
 import com.just.sapi.blog.entity.QBlogSearchLogEntity;
 import com.just.sapi.blog.entity.QBlogSearchRankEntity;
 import com.querydsl.core.types.Projections;
@@ -37,25 +38,17 @@ public class BlogSearchRankRepositoryImpl implements BlogSearchRankCustomReposit
     }
 
     @Override
-    public List<BlogSearchLogDTO> findBlogSearchLogGroupByKeywordBetween(LocalDateTime startDate, LocalDateTime endDate) {
-        NumberPath<Long> aliasCount = Expressions.numberPath(Long.class, "count");
-        List<BlogSearchLogDTO> list = jpaQueryFactory.select(
+    public BlogSearchRankDTO findTop1OrderByRowIdDesc() {
+        return jpaQueryFactory.select(
                 Projections.constructor(
-                        BlogSearchLogDTO.class,
-                        qBlogSearchLogEntity.keyword,
-                        qBlogSearchLogEntity.keyword.count().as(aliasCount)
+                        BlogSearchRankDTO.class,
+                        qBlogSearchRankEntity.aggregatedAt,
+                        qBlogSearchRankEntity.keyword,
+                        qBlogSearchRankEntity.count
                 ))
-                .from(qBlogSearchLogEntity)
-                .where(qBlogSearchLogEntity.createdAt.goe(startDate), qBlogSearchLogEntity.createdAt.lt(endDate))
-                .groupBy(qBlogSearchLogEntity.keyword)
-                .orderBy(aliasCount.desc())
-                .limit(10)
-                .fetch();
-
-        return list;
-    }
-
-    @Override
-    public void saveRankedBlogSearchLogs(List<BlogSearchRankDTO> rankedBlogSearchLogs) {
+                .from(qBlogSearchRankEntity)
+                .orderBy(qBlogSearchRankEntity.rowId.desc())
+                .limit(1)
+                .fetchOne();
     }
 }

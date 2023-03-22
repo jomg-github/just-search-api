@@ -6,29 +6,19 @@ import com.just.sapi.common.dto.ResponseListMetaDTO;
 import com.just.sapi.common.dto.ResponseMetaDTO;
 import com.just.sapi.common.enums.ErrorCode;
 import com.just.sapi.common.utils.SimplePageUtil;
-import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
-import org.springframework.web.reactive.function.client.WebClientException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.util.ArrayList;
@@ -67,8 +57,23 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
                     .build();
         }
 
+        if (body instanceof ResponseErrorDTO) {
+            ResponseErrorDTO responseWithMeta = (ResponseErrorDTO) body;
+
+            return ResponseErrorDTO.builder()
+                    .meta(responseWithMeta.getMeta())
+                    .error(responseWithMeta.getError())
+                    .build();
+        }
+
         if (body instanceof ResponseDTO) {
-            return body;
+            ResponseDTO responseWithMeta = (ResponseDTO) body;
+            responseWithMeta.getMeta().setResult(Boolean.TRUE);
+
+            return ResponseDTO.builder()
+                    .meta(responseWithMeta.getMeta())
+                    .data(responseWithMeta.getData())
+                    .build();
         }
 
         return ResponseDTO.builder()

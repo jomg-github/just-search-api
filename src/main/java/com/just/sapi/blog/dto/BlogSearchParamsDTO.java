@@ -10,9 +10,9 @@ public class BlogSearchParamsDTO {
     @NotNull(message = "검색어를 입력하세요.")
     private String query;
     private String sort = "accuracy";
-    @Range(min = 1, max = 500)
+    @Range(min = 1, max = 50)
     private Integer page = 1;
-    @Range(min = 1, max = 500)
+    @Range(min = 1, max = 50)
     private Integer limit = 10;
     @Builder
     public BlogSearchParamsDTO(String query, String sort, Integer page, Integer limit) {

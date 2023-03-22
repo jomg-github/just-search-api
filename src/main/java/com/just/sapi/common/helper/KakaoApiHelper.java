@@ -1,28 +1,23 @@
 package com.just.sapi.common.helper;
 
-import com.just.sapi.blog.dto.BlogDTO;
 import com.just.sapi.blog.dto.BlogSearchParamsDTO;
 import com.just.sapi.common.advice.ServiceException;
 import com.just.sapi.common.dto.ApiCallDTO;
 import com.just.sapi.common.dto.KakaoApiResponseDTO;
 import com.just.sapi.common.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.util.Pair;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientException;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +28,7 @@ public class KakaoApiHelper implements ApiHelper {
     @Value("${TEST_AUTHORIZATION}")
     private String HEADER;
     private final WebClient webClient;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public KakaoApiResponseDTO searchBlogs(BlogSearchParamsDTO blogSearchParamsDTO) {
@@ -46,8 +42,9 @@ public class KakaoApiHelper implements ApiHelper {
 
     @Override
     public KakaoApiResponseDTO apiCall(ApiCallDTO apiCallDTO) {
+        logger.info("[API 요청기록] {}", apiCallDTO.toString());
         try {
-            Mono<KakaoApiResponseDTO> result = webClient
+            KakaoApiResponseDTO result = webClient
                     .mutate()
                     .defaultHeaders(httpHeaders -> {
                         httpHeaders.addAll(apiCallDTO.getHeaders());
@@ -60,16 +57,14 @@ public class KakaoApiHelper implements ApiHelper {
                     .onStatus(HttpStatus -> HttpStatus.is4xxClientError(), response -> {
                         return Mono.error(new ServiceException(HttpStatus.BAD_REQUEST.value(), ErrorCode.INVALID_PARAMETER.message));
                     })
-                    .bodyToMono(KakaoApiResponseDTO.class);
-            return result.block();
-        } catch (WebClientException e) {
-            throw e;
-        } catch (ServiceException e) {
-            throw e;
+                    .bodyToMono(KakaoApiResponseDTO.class)
+                    .block();
+            logger.info("[API 응답기록] {}", result.toString());
+
+            return result;
         } catch (Exception e) {
             throw e;
         }
-
     }
 
     private String getRequestUrl(BlogSearchParamsDTO blogSearchParamsDTO) {
