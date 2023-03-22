@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -54,10 +53,7 @@ public class BlogService {
                 )
                 .toList();
 
-        // page, limit, total
-//        Pageable pageable = SimplePageUtil.kakaoPagableRequestOf(blogSearchParamsDTO.getPage(), blogSearchParamsDTO.getLimit(), meta.getIsEnd(), meta.getPageableCount());
-        logger.info(meta.toString());
-        Pageable pageable = PageRequest.of(blogSearchParamsDTO.getPage(), blogSearchParamsDTO.getLimit());
+        Pageable pageable = SimplePageUtil.kakaoPagableRequestOf(blogSearchParamsDTO.getPage(), blogSearchParamsDTO.getLimit(), meta.getIsEnd(), meta.getPageableCount());
 
         return new PageImpl<>(blogs, pageable, meta.getPageableCount());
     }

@@ -1,6 +1,5 @@
 package com.just.sapi.blog.repository;
 
-import com.just.sapi.blog.dto.BlogSearchLogDTO;
 import com.just.sapi.blog.entity.BlogSearchLogEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 

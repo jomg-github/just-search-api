@@ -2,7 +2,8 @@ package com.just.sapi.blog.dto;
 
 
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
 import org.hibernate.validator.constraints.Range;
 
 @Getter

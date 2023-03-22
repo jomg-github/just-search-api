@@ -22,10 +22,10 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 public class KakaoApiHelper implements ApiHelper {
-    @Value("${TEST_URL}")
+    @Value("${SEARCH_API_URL}")
     private String SEARCH_API_URL;
 
-    @Value("${TEST_AUTHORIZATION}")
+    @Value("${AUTHORIZATION}")
     private String HEADER;
     private final WebClient webClient;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

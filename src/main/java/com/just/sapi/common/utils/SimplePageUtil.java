@@ -1,7 +1,6 @@
 package com.just.sapi.common.utils;
 
 import com.just.sapi.common.dto.ResponseListMetaDTO;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +19,7 @@ public class SimplePageUtil<T> {
 
     public static Pageable kakaoPagableRequestOf(Integer page, Integer limit, Boolean isEndPage, Integer total) {
         if (Boolean.TRUE.equals(isEndPage)) {
-            page = total / limit;
+            page = total / limit + 1;
         }
 
         return PageRequest.of(page, limit);

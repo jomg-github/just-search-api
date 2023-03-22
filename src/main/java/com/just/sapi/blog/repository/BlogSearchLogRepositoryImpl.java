@@ -1,10 +1,7 @@
 package com.just.sapi.blog.repository;
 
 import com.just.sapi.blog.dto.BlogSearchLogDTO;
-import com.just.sapi.blog.dto.BlogSearchRankCountMinMaxDTO;
-import com.just.sapi.blog.dto.BlogSearchRankDTO;
 import com.just.sapi.blog.entity.QBlogSearchLogEntity;
-import com.just.sapi.blog.entity.QBlogSearchRankEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;

@@ -1,7 +1,9 @@
 package com.just.sapi.blog.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Table(name = "TB_BLOG_SEARCH_LOG")
 @Entity

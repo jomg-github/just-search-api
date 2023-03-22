@@ -3,11 +3,8 @@ package com.just.sapi.common.dto;
 import com.just.sapi.blog.dto.BlogSearchParamsDTO;
 import lombok.Builder;
 import lombok.Data;
-import org.hibernate.mapping.Any;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-
-import java.util.Map;
 
 @Data
 public class ApiCallDTO {

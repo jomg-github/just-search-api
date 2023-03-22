@@ -1,10 +1,2 @@
-KAKAO_DEV:
-  SEARCH_API_URL: https://dapi.kakao.com/v2/search/web
-  AUTHORIZATION: KakaoAK 09ab6d27fb43c2a760d6f7964a2d1bce
-
-NAVER_DEV:
-  SEARCH_API_URL: https://dapi.kakao.com/v2/search/blog
-  AUTHORIZATION: KakaoAK 09ab6d27fb43c2a760d6f7964a2d1bce
-
-TEST_URL: https://dapi.kakao.com/v2/search/blog
-TEST_AUTHORIZATION: KakaoAK 09ab6d27fb43c2a760d6f7964a2d1bce
+SEARCH_API_URL: https://dapi.kakao.com/v2/search/blog
+AUTHORIZATION: KakaoAK 09ab6d27fb43c2a760d6f7964a2d1bce
